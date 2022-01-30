@@ -11,7 +11,9 @@ const swaggerDocument = YAML.load("./swagger.yaml");
 
 app.use('/api-docs',swaggerUi.serve,swaggerUi.setup(swaggerDocument));
 
-
+app.get("/",(req,res)=>{
+    "Welcome to user login api";
+})
 
 // middlewares
 app.use(express.json());
