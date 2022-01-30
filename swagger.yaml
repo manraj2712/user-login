@@ -6,7 +6,7 @@ info:
 
 
 servers:
-  - url: https://user-login-api27.herokuapp.com
+  - url: https://user-login-api27.herokuapp.com/api/v1
     description: Deployed version of the app
   - url: http://localhost:4000/api/v1
     description: Local host for test purpose.
