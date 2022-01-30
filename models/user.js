@@ -15,6 +15,7 @@ const userSchema = new mongoose.Schema({
         validate: [validator.isEmail,"Please enter a valid email"],
         lowercase: [true,"Email should be in lowercase"],
         unique:true,
+        sparse: true,
     },
     password:{
         type: String,
@@ -24,7 +25,7 @@ const userSchema = new mongoose.Schema({
         type: String,
         maxlength: [10,"Mobile number should not exeed 10 digits"],
         minlength: [10, "Mobile number should contain atleast 10 digits"],
-        unique:true
+        sparse: true,
     },
     phoneLoginOtp: {
         type: String,
