@@ -1,0 +1,272 @@
+openapi: 3.0.0
+info:
+  title: User Login
+  description: User login and register using email or phone number
+  version: 1.0.0
+
+
+servers:
+  - url: http://localhost:4000/api/v1
+    description: Local host for test purpose.
+
+
+paths:
+  /signup-with-email:
+    post:
+      tags: 
+        - Sign Up
+      summary: User signup using email
+      description: Accepts name, email and password and returns an with user details and auth token
+
+      requestBody:
+        description: Required name, email and password
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  default: Ram
+                email:
+                  type: string
+                  default: yourmail@test.com
+                password:
+                  type: string
+                  default: Abcd#123
+
+      required:
+        - name
+        - email
+        - password
+        
+      responses:
+        '200':
+          description: A JSON object with user details and success status
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  token:
+                    type: string
+                  user:
+                    type: object
+                    properties:
+                      name: 
+                        type: string
+                      email:
+                        type: string
+                      _id:
+                        type: string
+
+
+  /signup-with-phone:
+    post:
+      tags: 
+        - Sign Up
+      summary: User signup using phone number
+      description: Accepts name and phone number, then sends an otp to the given phone number and returns a JSON object with success status and a message
+
+      requestBody:
+        description: Required name, and an indian phone number having 10 digits
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  default: Ram
+                phone:
+                  type: number
+                  default: 9058906611
+
+      required:
+        - name
+        - phone
+        
+      responses:
+        '200':
+          description: A JSON Object with success status and a message
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                    default: OTP sent successfully
+
+
+  /login-with-email:
+    post:
+      tags: 
+        - Login
+      summary: User Login with email and password
+      description: Accepts email and password and returns an object with auth token on successful verification
+
+      requestBody:
+        description: Required a registered email and a password
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  default: yourmail@test.com
+                password:
+                  type: string
+                  default: "Abcd#123"
+
+      required:
+        - email
+        - password
+        
+      responses:
+        '200':
+          description: A JSON object with user details, login auth token and success status
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  token:
+                    type: string
+                  user:
+                    type: object
+                    properties:
+                      name: 
+                        type: string
+                      email:
+                        type: string
+                      _id:
+                        type: string
+
+  /sendotp:
+    post:
+      tags: 
+        - OTP
+      summary: Sends OTP to registered user's phone number
+      description: Accepts a phone number, then sends an otp to the given phone number and returns a JSON object with success status and a message
+
+      requestBody:
+        description: Required an Indian phone number having 10 digits
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                phone:
+                  type: number
+                  default: 9058906611
+
+        required:
+         - phone
+        
+      responses:
+        '200':
+          description: A JSON Object with success status and a message
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                    default: OTP sent successfully
+
+
+  /verifyotp:
+    post:
+      tags:
+        - OTP
+      summary: Verifies if the otp entered is valid
+      description: Accepts phone number and otp and returns an with user details and auth token
+
+      requestBody:
+        description: Required an Indian phone number having 10 digits and a 6 digit otp sent on given mobile number
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                phone:
+                  type: string
+                  default: "9058906611"
+                otp:
+                  type: string
+                  default: "123456"
+
+        required:
+          - phone
+          - otp
+        
+      responses:
+        '200':
+          description: A JSON object with user details, login auth token and success status
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  token:
+                    type: string
+                  user:
+                    type: object
+                    properties:
+                      name: 
+                        type: string
+                      email:
+                        type: string
+                      _id:
+                        type: string
+
+  /get-user-details:
+    post:
+      tags: 
+        - User
+      summary: Gives user details
+      description: Accepts an login auth token 
+
+      requestBody:
+        description: Required a valid auth token not more than 30 days old
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                token:
+                  type: string
+
+        required:
+          - token
+        
+      responses:
+        '200':
+          description: A JSON object with user details
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user:
+                    type: object
+                    properties:
+                      name: 
+                        type: string
+                      email:
+                        type: string
+                      _id:
+                        type: string
